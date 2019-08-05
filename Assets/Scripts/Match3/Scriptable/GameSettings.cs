@@ -8,6 +8,7 @@ namespace Match3.Scriptable
     public class GameSettings : ScriptableObject
     {
         public BoardSettings BoardSettings;
+        public TileViewSettings TileViewSettings;
     }
 
     [Serializable]

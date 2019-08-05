@@ -10,22 +10,22 @@ namespace Match3
     {
         [SerializeField] private GameSettings GameSettings;
 
-        private IBoard _board;
+        private IBoardController _boardController;
         private IInputHandler _inputHandler;
         
         private GameAction _gameAction;
         
         private void Awake()
         {
-            _board = GetComponent<IBoard>();
+            _boardController = GetComponent<IBoardController>();
             _inputHandler = GetComponent<IInputHandler>();
         }
 
         private void Start()
         {
-            _gameAction = GameAction.WaitingForAnimationToEnd;
+            _gameAction = GameAction.Playing;
             
-            _board.Create(GameSettings.BoardSettings);
+            _boardController.CreateBoard(GameSettings.BoardSettings);
 //            _board.BoardReadyEvent += ...
         }
 
@@ -51,11 +51,10 @@ namespace Match3
         
         private void UpdateInput()
         {
-            _inputHandler.HandleInput();
-
-            if (_inputHandler.TryingToSwap)
+            if (_inputHandler.DidClickHappen())
             {
-                _board.TryToSwap();
+                var clickedObject = _inputHandler.GetClickedObject();
+                _boardController.HandleClick(clickedObject);
             }
         }
 

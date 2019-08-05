@@ -5,10 +5,45 @@ namespace Match3
 {
     public class InputHandler : MonoBehaviour, IInputHandler
     {
-        public bool TryingToSwap { get; private set;  }
-        public void HandleInput()
+        private const float ClickMaxDistanceFromCamera = 50f;
+        private const float ClickIntervalThreshold = 0.2f;
+
+        [SerializeField] private LayerMask ClickableLayers;
+        
+        private Camera _mainCamera;
+        // TODO: Is it a good field name?
+        private float _nextTimeClickAvailable;
+
+        private void Awake()
         {
-            throw new System.NotImplementedException();
+            _mainCamera = Camera.main;
+        }
+
+        public GameObject GetClickedObject()
+        {
+            var currentTime = Time.time;
+            if (currentTime > _nextTimeClickAvailable)
+            {
+                _nextTimeClickAvailable = currentTime + ClickIntervalThreshold;
+                var ray = _mainCamera.ScreenPointToRay (Input.mousePosition);
+                if (Physics.Raycast (ray, out var hit, ClickMaxDistanceFromCamera, ClickableLayers)) 
+                {
+#if UNITY_EDITOR
+                    //draw invisible ray cast/vector
+                    Debug.DrawLine (ray.origin, hit.point);
+                    //log hit area to the console
+                    Debug.Log(hit.point, hit.collider.gameObject);
+#endif
+                    return hit.collider.gameObject;
+                }  
+            }
+            
+            return null;
+        }
+
+        public bool DidClickHappen()
+        {
+            return Input.GetMouseButton(0);
         }
     }
 }

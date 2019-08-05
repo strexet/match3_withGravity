@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5505539fbf5f4dd8b9bbbb57644272ae, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  NumberOfRaws: 5
-  NumberOfColumns: 5
+  BoardSettings:
+    NumberOfRaws: 5
+    NumberOfColumns: 5
+  TileViewSettings: {fileID: 11400000, guid: 8032d33d3f491c7479b318cbfb65ce21, type: 2}

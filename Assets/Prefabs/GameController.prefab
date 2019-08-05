@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c1af4d6731d5641b86067bd6cf7b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSettings: {fileID: 11400000, guid: 46039f89abe99cf4ea622471425978c5, type: 2}
+  GameSettings: {fileID: 11400000, guid: 46039f89abe99cf4ea622471425978c5, type: 2}
 --- !u!114 &1077529624671828267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,6 +58,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f32bfd18bc43ea94e167210d741ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TileViewSettings: {fileID: 11400000, guid: 8032d33d3f491c7479b318cbfb65ce21, type: 2}
+  GameBoardRoot: {fileID: 0}
 --- !u!114 &5639714815176390165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,3 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb579527f85c4b20b81e29559cd68bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClickableLayers:
+    serializedVersion: 2
+    m_Bits: 256
