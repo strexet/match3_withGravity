@@ -1,15 +1,11 @@
 ﻿using Match3.Enums;
 using Match3.Interfaces;
-using Match3.Scriptable;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Match3
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] private GameSettings GameSettings;
-
         private IBoardController _boardController;
         private IInputHandler _inputHandler;
         
@@ -25,7 +21,7 @@ namespace Match3
         {
             _gameAction = GameAction.Playing;
             
-            _boardController.CreateBoard(GameSettings.BoardSettings);
+            _boardController.CreateBoard();
 //            _board.BoardReadyEvent += ...
         }
 

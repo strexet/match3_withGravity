@@ -28,12 +28,6 @@ namespace Match3
                 var ray = _mainCamera.ScreenPointToRay (Input.mousePosition);
                 if (Physics.Raycast (ray, out var hit, ClickMaxDistanceFromCamera, ClickableLayers)) 
                 {
-#if UNITY_EDITOR
-                    //draw invisible ray cast/vector
-                    Debug.DrawLine (ray.origin, hit.point);
-                    //log hit area to the console
-                    Debug.Log(hit.point, hit.collider.gameObject);
-#endif
                     return hit.collider.gameObject;
                 }  
             }

@@ -1,6 +1,3 @@
-using JetBrains.Annotations;
-using UnityEngine;
-
 namespace Match3
 {
     public class BoardClickHandler
@@ -14,6 +11,11 @@ namespace Match3
         {
             if (_haveSelectedTile)
             {
+                if (clickedTile == _selectedTile)
+                {
+                    return;
+                }
+                
                 TryingToSwap = true;
                 TilesBeingSwapped = (_selectedTile, clickedTile);
                 _haveSelectedTile = false;

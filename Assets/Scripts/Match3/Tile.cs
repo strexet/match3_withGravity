@@ -1,37 +1,64 @@
 using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Match3
 {
     public class Tile
     {
+        public PositionOnBoard PositionOnBoard;
+        
+        private bool _isEmptyTile;
         private int _itemIndex;
-        private Tile() { }
 
-        public static Tile CreateRandom(int NumberOfAvailableColors)
+        public bool IsEmptyTile
         {
-            var tile = new Tile();
-            tile.ItemIndex = Random.Range(0, NumberOfAvailableColors);
-            return tile;
+            get => _isEmptyTile;
+            set
+            {
+                _isEmptyTile = value;
+                OnTileStateChangedEvent(_itemIndex);
+            }
         }
 
         public int ItemIndex
         {
             get => _itemIndex;
-            private set
+            set
             {
                 _itemIndex = value;
-                OnItemIndexChangedEvent(value);
+                OnTileStateChangedEvent(_itemIndex);
             }
         }
+        
+        public event Action<int> OnTileStateChangedEvent = delegate {  };
 
-        public event Action<int> OnItemIndexChangedEvent = delegate {  };
+        private Tile() { }
+
+        public static Tile CreateRandom(int numberOfAvailableColors)
+        {
+            var tile = new Tile();
+            tile._itemIndex = Random.Range(0, numberOfAvailableColors);
+            tile._isEmptyTile = false;
+            return tile;
+        }
 
         public void SwapWith(Tile other)
         {
-            var tempIndex = ItemIndex;
-            ItemIndex = other.ItemIndex;
-            other.ItemIndex = tempIndex;
+            var tempIndex = _itemIndex;
+            _itemIndex = other._itemIndex;
+            other._itemIndex = tempIndex;
+        }
+        
+        public void ApplySwap()
+        {
+            OnTileStateChangedEvent(_itemIndex);
+        }
+
+        public int DistanceTo(Tile other)
+        {
+            return Mathf.Abs(PositionOnBoard.x - other.PositionOnBoard.x)
+                   + Mathf.Abs(PositionOnBoard.y - other.PositionOnBoard.y);
         }
     }
 }

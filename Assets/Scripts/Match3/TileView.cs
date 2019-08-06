@@ -1,7 +1,5 @@
-using System;
 using Match3.Scriptable;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Match3
 {
@@ -17,8 +15,8 @@ namespace Match3
             set
             {
                 _associatedTile = value;
-                Color = GetColorFromIndex(_associatedTile.ItemIndex);
-                _associatedTile.OnItemIndexChangedEvent += OnAssociatedTileItemIndexChanged;
+                _associatedTile.OnTileStateChangedEvent += OnAssociatedTileStateStateChanged;
+                OnAssociatedTileStateStateChanged(_associatedTile.ItemIndex);
             }
         }
 
@@ -39,11 +37,18 @@ namespace Match3
 
         private void OnDisable()
         {
-            _associatedTile.OnItemIndexChangedEvent -= OnAssociatedTileItemIndexChanged;
+            _associatedTile.OnTileStateChangedEvent -= OnAssociatedTileStateStateChanged;
         }
 
-        public void OnAssociatedTileItemIndexChanged(int newIndex)
+        public void OnAssociatedTileStateStateChanged(int newIndex)
         {
+            if (_associatedTile.IsEmptyTile)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+            
+            gameObject.SetActive(true);
             Color = GetColorFromIndex(newIndex);
         }
     }
