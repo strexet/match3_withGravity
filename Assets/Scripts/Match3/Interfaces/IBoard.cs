@@ -1,9 +1,13 @@
-namespace Match3
+using System.Collections.Generic;
+using Match3.Board;
+
+namespace Match3.Interfaces
 {
-    public interface IBoard
+    public interface IBoard : IEnumerable<Tile>
     {
         bool IsTileOnBoard(PositionOnBoard position);
         Tile GetTileAt(PositionOnBoard position);
-        void SetTileAt(Tile tile, PositionOnBoard position);
+        void SetTileAt(PositionOnBoard position, Tile tile);
+        bool AreNeighbourTiles((Tile, Tile) tilesBeingSwapped);
     }
 }

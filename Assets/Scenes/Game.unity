@@ -38,13 +38,13 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -173,7 +173,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -197,7 +197,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 5, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -213,7 +213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1995985629}
   m_Layer: 0
-  m_Name: GameBoard
+  m_Name: GameBoardRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,5 +305,17 @@ PrefabInstance:
       propertyPath: GameBoardRoot
       value: 
       objectReference: {fileID: 1995985629}
+    - target: {fileID: 1077529624671828267, guid: 75b0e981b5ee8714e86dedcb707fb46d,
+        type: 3}
+      propertyPath: ItemViewSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 8032d33d3f491c7479b318cbfb65ce21,
+        type: 2}
+    - target: {fileID: -5979086017458556735, guid: 75b0e981b5ee8714e86dedcb707fb46d,
+        type: 3}
+      propertyPath: _gameSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 46039f89abe99cf4ea622471425978c5,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b0e981b5ee8714e86dedcb707fb46d, type: 3}

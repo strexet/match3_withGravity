@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   BoardSettings:
-    NumberOfRaws: 5
-    NumberOfColumns: 5
-  TileViewSettings: {fileID: 11400000, guid: 8032d33d3f491c7479b318cbfb65ce21, type: 2}
+    NumberOfRaws: 10
+    NumberOfColumns: 10
+  ItemViewSettings: {fileID: 11400000, guid: 8032d33d3f491c7479b318cbfb65ce21, type: 2}

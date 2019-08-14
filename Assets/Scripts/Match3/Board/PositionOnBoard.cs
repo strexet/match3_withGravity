@@ -1,5 +1,8 @@
-namespace Match3
+using System;
+
+namespace Match3.Board
 {
+    [Serializable]
     public struct PositionOnBoard
     {
         public int x;

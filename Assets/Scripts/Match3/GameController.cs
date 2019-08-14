@@ -1,11 +1,14 @@
 ﻿using Match3.Enums;
 using Match3.Interfaces;
+using Match3.Scriptable;
 using UnityEngine;
 
 namespace Match3
 {
     public class GameController : MonoBehaviour
     {
+        [SerializeField] private GameSettings _gameSettings;
+        
         private IBoardController _boardController;
         private IInputHandler _inputHandler;
         
@@ -21,8 +24,7 @@ namespace Match3
         {
             _gameAction = GameAction.Playing;
             
-            _boardController.CreateBoard();
-//            _board.BoardReadyEvent += ...
+            _boardController.CreateBoard(_gameSettings.BoardSettings);
         }
 
         private void Update()
@@ -53,14 +55,6 @@ namespace Match3
                 _boardController.HandleClick(clickedObject);
             }
         }
-
-        
-
-        
-
-        
-
-        
     }
 }
 

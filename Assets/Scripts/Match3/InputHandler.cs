@@ -11,8 +11,7 @@ namespace Match3
         [SerializeField] private LayerMask ClickableLayers;
         
         private Camera _mainCamera;
-        // TODO: Is it a good field name?
-        private float _nextTimeClickAvailable;
+        private float _nextClickDetectionTime;
 
         private void Awake()
         {
@@ -22,12 +21,13 @@ namespace Match3
         public GameObject GetClickedObject()
         {
             var currentTime = Time.time;
-            if (currentTime > _nextTimeClickAvailable)
+            if (currentTime > _nextClickDetectionTime)
             {
-                _nextTimeClickAvailable = currentTime + ClickIntervalThreshold;
+                _nextClickDetectionTime = currentTime + ClickIntervalThreshold;
                 var ray = _mainCamera.ScreenPointToRay (Input.mousePosition);
                 if (Physics.Raycast (ray, out var hit, ClickMaxDistanceFromCamera, ClickableLayers)) 
                 {
+                    Debug.Log("click", hit.collider.gameObject);
                     return hit.collider.gameObject;
                 }  
             }
