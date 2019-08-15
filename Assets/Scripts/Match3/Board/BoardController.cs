@@ -11,7 +11,6 @@ namespace Match3.Board
 {
     public class BoardController : MonoBehaviour, IBoardController, IAffectedByGravity
     {
-        // TODO: Is it a good place for that variable/field/property?
         [SerializeField] private ItemViewSettings ItemViewSettings;
         [SerializeField] private Transform GameBoardRoot;
 
@@ -33,16 +32,14 @@ namespace Match3.Board
         public void CreateBoard(BoardSettings boardSettings)
         {
             var numberOfAvailableColors = ItemViewSettings.ItemPrefabs.Length;
+            var itemPool = new ItemPool(numberOfAvailableColors);
+
             _boardSettings = boardSettings;
             _affectedByGravityList = new List<IAffectedByGravity>(1);
             
-            
-            // TODO: Move dependencies away from the class, where they are used.
             _boardPositionConverter = new BoardPositionConverter(ItemViewSettings.TileSize);
             _itemViewStorage = new ItemViewStorage(ItemViewSettings, GameBoardRoot, _boardPositionConverter);
 
-
-            var itemPool = new ItemPool(numberOfAvailableColors);
             _board = new SquareBoard(_boardSettings, numberOfAvailableColors, itemPool);
             CreateBoardView();
 
@@ -50,17 +47,14 @@ namespace Match3.Board
             _emptyTilesHandler = emptyTilesHandler;
             _affectedByGravityList.Add(emptyTilesHandler);
 
-            _matcher = new Matcher(_boardSettings, _board, 3);
-            
-            
             _boardClickHandler = new BoardClickHandler();
             
-            ForceHandleMatches();
-            
+            _matcher = new Matcher(_boardSettings, _board, 3);
             _matchHandler = new MatchHandlerWithGravity(itemPool, _itemViewStorage, SwapGravity);
+
+            ForceHandleMatches(new SimpleMatchHandler());
         }
 
-        // TODO: Does this method belong here?
         private void CreateBoardView()
         {
             foreach (var tile in _board)
@@ -71,16 +65,19 @@ namespace Match3.Board
             }
         }
         
-        private void ForceHandleMatches()
+        private void ForceHandleMatches(IMatchHandler forceMatchHandler)
         {
-            _matchHandler = new SimpleMatchHandler();
-
+            var currentMatchHandler = _matchHandler;
+            _matchHandler = forceMatchHandler;
+            
             for (var match = _matcher.GetNextMatch(); 
                 match.NumberOfMatchedTiles > 0  || _emptyTilesHandler.HasEmptyTiles(); 
                 match = _matcher.GetNextMatch())
             {
                 HandleMatches();
             }
+
+            _matchHandler = currentMatchHandler;
         }
 
         public void HandleClick(GameObject clickedObject)
