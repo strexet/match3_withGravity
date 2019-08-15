@@ -27,7 +27,6 @@ namespace Match3
                 var ray = _mainCamera.ScreenPointToRay (Input.mousePosition);
                 if (Physics.Raycast (ray, out var hit, ClickMaxDistanceFromCamera, ClickableLayers)) 
                 {
-                    Debug.Log("click", hit.collider.gameObject);
                     return hit.collider.gameObject;
                 }  
             }
