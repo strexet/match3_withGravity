@@ -19,9 +19,9 @@ namespace Match3.Items.Pool
             return item;
         }
 
-        public void Return(Item poolable)
+        public void Return(Item item)
         {
-            poolable.OnReturn();
+            item.OnReturn();
         }
     }
 }

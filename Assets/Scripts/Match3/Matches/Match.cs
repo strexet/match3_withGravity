@@ -1,9 +1,12 @@
-namespace Match3.Board
+using System.Collections.Generic;
+using Match3.Board;
+
+namespace Match3.Matches
 {
     public class Match
     {
         public readonly int NumberOfMatchedTiles;
-        public readonly Tile[] MatchedTiles;
+        public readonly List<Tile> MatchedTiles;
 
         public static Match CreateEmpty()
         {
@@ -22,12 +25,18 @@ namespace Match3.Board
 
         private Match(Tile[] tiles)
         {
-            NumberOfMatchedTiles = tiles.Length;
-            MatchedTiles = new Tile[NumberOfMatchedTiles];
-            for (int i = 0; i < MatchedTiles.Length; i++)
+            MatchedTiles = new List<Tile>(tiles.Length);
+            
+            for (int i = 0; i < tiles.Length; i++)
             {
-                MatchedTiles[i] = tiles[i];
+                var tile = tiles[i];
+                if (!MatchedTiles.Contains(tile))
+                {
+                    MatchedTiles.Add(tile);
+                }
             }
+
+            NumberOfMatchedTiles = MatchedTiles.Count;
         }
     }
 }

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Match3.Board;
 using Match3.Interfaces;
 using Match3.Scriptable;
 
-namespace Match3.Board
+namespace Match3.Matches
 {
     
     public class Matcher : IMatcher
@@ -18,7 +19,26 @@ namespace Match3.Board
             _board = board;
             _minTilesInRawForMatch = minTilesInRawForMatch;
             _currentSimilarTiles = new List<Tile>(5);
-            _similarTiles = new List<Tile>(10);
+            _similarTiles = new List<Tile>(5);
+        }
+        
+        public Match GetNextMatch()
+        {
+            _similarTiles.Clear();
+
+            foreach (var tile in _board)
+            {
+                CheckHorizontal(tile);
+                CheckVertical(tile);
+
+                if (_similarTiles.Count > _minTilesInRawForMatch)
+                {
+                    var match = Match.CreateFromArray(_similarTiles.ToArray());
+                    return match;
+                }
+            }
+
+            return Match.CreateEmpty();
         }
 
         private void CheckVertical(Tile tile)
@@ -86,25 +106,6 @@ namespace Match3.Board
                 
                 _currentSimilarTiles.Add(offsetTile);    
             }
-        }
-
-        public Match GetNextMatchFromInterface()
-        {
-            _similarTiles.Clear();
-
-            foreach (var tile in _board)
-            {
-                CheckHorizontal(tile);
-                CheckVertical(tile);
-
-                if (_similarTiles.Count > _minTilesInRawForMatch)
-                {
-                    var match = Match.CreateFromArray(_similarTiles.ToArray());
-                    return match;
-                }
-            }
-
-            return Match.CreateEmpty();
         }
     }
 }

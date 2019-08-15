@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Match3.Interfaces;
 using Match3.Items;
 using Match3.Items.Pool;
-using Match3.MatchHandlers;
+using Match3.Matches;
 using Match3.Scriptable;
 using UnityEngine;
 
@@ -16,10 +16,8 @@ namespace Match3.Board
         [SerializeField] private Transform GameBoardRoot;
 
         private IBoardPositionConverter _boardPositionConverter;
-        private IMatcher _matcherForThree;
-        private IMatcher _matcherForFour;
-        private IMatchHandler _matchHandlerForFour;
-        private IMatchHandler _matchHandlerForThree;
+        private IMatcher _matcher;
+        private IMatchHandler _matchHandler;
         private IEmptyTilesHandler _emptyTilesHandler;
         private IBoard _board;
         private List<IAffectedByGravity> _affectedByGravityList;
@@ -52,15 +50,14 @@ namespace Match3.Board
             _emptyTilesHandler = emptyTilesHandler;
             _affectedByGravityList.Add(emptyTilesHandler);
 
-            _matcherForFour = new Matcher(_boardSettings, _board, 4);
-            _matcherForThree = new Matcher(_boardSettings, _board, 3);
+            _matcher = new Matcher(_boardSettings, _board, 3);
             
-            _matchHandlerForFour = new FourMatchHandler(_matcherForFour, itemPool, _itemViewStorage, SwapGravity);
-            _matchHandlerForThree = new ThreeMatchHandler(_matcherForThree);
             
             _boardClickHandler = new BoardClickHandler();
             
-            _matchHandlerForThree.HandleMatches();
+            ForceHandleMatches();
+            
+            _matchHandler = new MatchHandlerWithGravity(itemPool, _itemViewStorage, SwapGravity);
         }
 
         // TODO: Does this method belong here?
@@ -71,6 +68,18 @@ namespace Match3.Board
                 var item = tile.Item;
                 var itemView = _itemViewStorage.GetViewFromIndex(item.ItemIndex);
                 itemView.AssociatedItem = item;
+            }
+        }
+        
+        private void ForceHandleMatches()
+        {
+            _matchHandler = new SimpleMatchHandler();
+
+            for (var match = _matcher.GetNextMatch(); 
+                match.NumberOfMatchedTiles > 0  || _emptyTilesHandler.HasEmptyTiles(); 
+                match = _matcher.GetNextMatch())
+            {
+                HandleMatches();
             }
         }
 
@@ -100,13 +109,18 @@ namespace Match3.Board
             var tile_1 = tilesBeingSwapped.Item1;
             var tile_2 = tilesBeingSwapped.Item2;
 
+            // Try to swap.
             tile_1.SwapWith(tile_2);
-            if (!_matcherForThree.HasMatches())
+
+            var match = _matcher.GetNextMatch();
+            if (match.NumberOfMatchedTiles == 0)
             {
+                // Swap back on fail.
                 tilesBeingSwapped.Item1.SwapWith(tilesBeingSwapped.Item2);
                 return;
             }
             
+            // Apply if there is new match.
             tile_1.ApplyChanges();
             tile_2.ApplyChanges();
 
@@ -120,25 +134,39 @@ namespace Match3.Board
                 return;
             }
             _nextUpdateTime = Time.time + 0.2f;
-
             
+            HandleMatches();
+        }
+
+        private void HandleMatches()
+        {
             if (_isHandlingMatches)
             {
-                _matchHandlerForFour.HandleMatches();
-                _matchHandlerForThree.HandleMatches();
+                var match = _matcher.GetNextMatch();
+                if (match.NumberOfMatchedTiles > 0)
+                {
+                    _matchHandler.HandleNextMatch(match);
+                }
+                else
+                {
+                    _isHandlingMatches = false;
+                }
             }
             else
             {
-                _emptyTilesHandler.HandleEmptyTilesStep();
+                if (_emptyTilesHandler.HasEmptyTiles())
+                {
+                    _emptyTilesHandler.HandleEmptyTilesStep();
+                }
+                else
+                {
+                    _isHandlingMatches = true;
+                }
             }
-
-            _isHandlingMatches = !_isHandlingMatches;
         }
-        
+
         public void SwapGravity()
         {
-            Debug.Break();
-            
             foreach (var affectedByGravity in _affectedByGravityList)
             {
                 affectedByGravity.SwapGravity();

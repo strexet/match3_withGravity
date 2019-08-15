@@ -85,11 +85,13 @@ namespace Match3.Items
 
         public void OnReturn()
         {
-            gameObject.SetActive(false);
             _associatedItem.ItemStateChangedEvent -= OnAssociatedItemStateChanged;
             _associatedItem = null;
 
             DestroyModifier();
+            
+            gameObject.SetActive(false);
+            
         }
 
         private void DestroyModifier()

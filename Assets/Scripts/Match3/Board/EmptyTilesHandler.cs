@@ -31,6 +31,19 @@ namespace Match3.Board
             AddNewElementsInTop();
         }
 
+        public bool HasEmptyTiles()
+        {
+            foreach (var tile in _board)
+            {
+                if (tile.IsEmptyTile)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void FallElementsDownWithGravity()
         {
             while (!DidAllTilesFall())

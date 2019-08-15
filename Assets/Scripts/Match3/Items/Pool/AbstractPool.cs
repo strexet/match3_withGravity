@@ -38,10 +38,10 @@ namespace Match3.Items.Pool
             return result;
         }
 
-        public void Return(T poolable)
+        public void Return(T item)
         {
-            poolable.OnReturn();
-            _pool.Enqueue(poolable);
+            item.OnReturn();
+            _pool.Enqueue(item);
         }
 
         protected abstract T CreateElement();

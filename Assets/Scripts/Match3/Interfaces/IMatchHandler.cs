@@ -1,4 +1,5 @@
 using Match3.Board;
+using Match3.Matches;
 
 namespace Match3.Interfaces
 {
